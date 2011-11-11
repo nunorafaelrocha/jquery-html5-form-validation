@@ -5,7 +5,7 @@
  * @return true or false
  *      -> coloca os inputs inválidos com a classe error_class_name
  */
-jQuery.fn.html5Validation = function (error_class_name) {
+jQuery.fn.html5validation = function (error_class_name) {
 
     // global validation
     var is_valid = true;
