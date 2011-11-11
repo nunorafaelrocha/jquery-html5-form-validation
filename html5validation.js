@@ -5,7 +5,7 @@
  * @return true or false
  *      -> coloca os inputs inválidos com a classe error_class_name
  */
-jQuery.fn.html5validation = function (error_class_name) {
+jQuery.fn.html5Validation = function (error_class_name) {
 
     // global validation
     var is_valid = true;
@@ -13,7 +13,7 @@ jQuery.fn.html5validation = function (error_class_name) {
     error_class_name != '' ? this.find('input').removeClass(error_class_name) : null;
     
     // verificar se os elementos que tem o attributo required estao todos preenchidos
-    this.find('input:[required]').each(function() {
+    this.find('[required]').each(function() {
       // get input element 
       var element = $(this);
       // get input type
@@ -41,13 +41,13 @@ jQuery.fn.html5validation = function (error_class_name) {
     });
 
     // verificar se os elementos que tem o attributo pattern estao todos correctamente preenchidos
-    this.find('input:[pattern]').each(function() {
+    this.find('[pattern]').each(function() {
       // get input element       
       var element = $(this);
       // get the pattern
       var pattern = element.attr('pattern');     
       // if pattern don't match     
-      if(element.val().trim() != '' && pattern && pattern != '' && !this.value.match('^'+pattern+'$'))
+      if(pattern && pattern != '' && !this.value.match('^'+pattern+'$'))
       {
         is_valid = false;
         error_class_name != '' ? element.addClass(error_class_name) : null;
