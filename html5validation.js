@@ -47,7 +47,7 @@ jQuery.fn.html5validation = function (error_class_name) {
       // get the pattern
       var pattern = element.attr('pattern');     
       // if pattern don't match     
-      if(element.val() != '' && pattern && pattern != '' && !this.value.match('^'+pattern+'$'))
+      if(element.val().trim() != '' && pattern && pattern != '' && !this.value.match('^'+pattern+'$'))
       {
         is_valid = false;
         error_class_name != '' ? element.addClass(error_class_name) : null;
