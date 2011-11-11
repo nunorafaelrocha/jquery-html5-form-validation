@@ -21,21 +21,11 @@ jQuery.fn.html5Validation = function (error_class_name) {
       
       // for different kind of types do different validation...
       if (type == 'checkbox' || type == 'radio')
-      {
-        var is_valid_group = true;
-        
-        $('[name*="'+this.name+'"]').each(function () {
-          if (!$(this).attr('checked')) 
-          {
-            is_valid_group = false;
-            error_class_name != '' ? $(this).addClass(error_class_name) : null;
-          }
-        });
-        
-        if (!is_valid_group) 
+      {        
+        if (!$('[name*="'+element.attr('name')+'"]:checked')) 
         {
+          error_class_name != '' ? $('[name*="'+element.attr('name')+'"]').addClass(error_class_name) : null;
           is_valid =false;
-          error_class_name != '' ? element.addClass(error_class_name) : null;
         }
       }
       else 
