@@ -14,7 +14,7 @@
       init : function( options ) { 
         
         var defaults = {
-          'error_class' : 'negative',
+          'error_class' : 'invalid',
         };
         
         var options = $.extend({}, defaults, options); 
