@@ -6,125 +6,89 @@
  * http://nunorafaelrocha.com
  *
  */
- 
-/*
- * Verifica se os inputs que estão dentro de um div (elem) estão validos
- * Verifica se os que tem o attributo required estão preenchidos
- * Verifica se os que tem o attributo pattern estão correctos
- * @return true or false
- *      -> coloca os inputs inválidos com a classe error_class_name
- */
-jQuery.fn.html5validation = function (error_class_name) {
 
-    // global validation
-    var is_valid = true;
-    
-    error_class_name != '' ? this.find('input,select,textarea').removeClass(error_class_name) : null;
-    error_class_name != '' ? $(this).removeClass(error_class_name) : null;
-    
-    // verificar se os elementos que tem o attributo required estao todos preenchidos
-    this.find('[required]').each(function() {
-      // get input element 
-      var element = $(this);
-      // get input type
-      var type = element.attr('type');
+
+(function( $ ){
+
+  var methods = {
+      init : function( options ) { 
+        var form = $(this);
+        form.bind('submit', function () {
+          form.html5formvalidation('validation', options );
+        });
+
+        // bind all form elements
+        form.find('input, textarea, select').bind('change keyup', function () {
+          $(this).html5formvalidation('elementValidation', options);
+        });
+      },
+      validation : function( options ) {
+        var is_valid = true;
+        
+        this.find('input, textarea, select').each(function () {
+          is_valid = ($(this).html5formvalidation('elementValidation', options) ? is_valid : false);          
+        });
+        
+        return is_valid;
+      },
+      elementValidation : function( options ) { 
+        var element = $(this);
+        var elem_is_valid = true;
+
+        // if has required tag
+        if (element.attr('required')) 
+        {
+          var type = element.attr('type');
+          // for different kind of types do different validation...
+          if (type == 'checkbox' || type == 'radio')
+          {        
+            if (!$('[name*="'+element.attr('name')+'"]:checked')) 
+            {
+              options.error_class ? $('[name*="'+element.attr('name')+'"]').addClass(options.error_class) : null;
+              elem_is_valid =false;
+            }
+          }
+          else 
+          {
+            // for other input types verifies if value is empty
+            if(element.val().trim() == '')
+            {
+              elem_is_valid = false;
+              options.error_class ? element.addClass(options.error_class) : null;
+            }
+          }
+        }
+        
+        
+        // if has pattern tag
+        if (element.attr('pattern')) 
+        {
+          // get the pattern
+          var pattern = element.attr('pattern');     
+          // if pattern don't match     
+          if(!element.val().match('^'+pattern+'$'))
+          {
+            elem_is_valid = false;
+            options.error_class ? element.addClass(options.error_class) : null;
+          }
+        }
+        
+        return elem_is_valid;
+      },
       
-      // for different kind of types do different validation...
-      if (type == 'checkbox' || type == 'radio')
-      {        
-        if (!$('[name*="'+element.attr('name')+'"]:checked')) 
-        {
-          error_class_name != '' ? $('[name*="'+element.attr('name')+'"]').addClass(error_class_name) : null;
-          is_valid =false;
-        }
-      }
-      else 
-      {
-        // for other input types verifies if value is empty
-        if(element.val().trim() == '')
-        {
-          is_valid =false;
-          error_class_name != '' ? element.addClass(error_class_name) : null;
-        }
-      }
-
-    });
-
-    // verificar se os elementos que tem o attributo pattern estao todos correctamente preenchidos
-    this.find('[pattern]').each(function() {
-      // get input element       
-      var element = $(this);
-      // get the pattern
-      var pattern = element.attr('pattern');     
-      // if pattern don't match     
-      if(pattern && pattern != '' && !this.value.match('^'+pattern+'$'))
-      {
-        is_valid = false;
-        error_class_name != '' ? element.addClass(error_class_name) : null;
-      }
-    });
+    };
     
-    // verificar ao proprio elemento
-    if ($(this).attr('required')) 
-    {
-      // get input element 
-      var element = $(this);
-      // get input type
-      var type = element.attr('type');
+  $.fn.html5formvalidation = function( method ) {
+
+      // Method calling logic
+      if ( methods[method] ) {
+        return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+      } else if ( typeof method === 'object' || ! method ) {
+        return methods.init.apply( this, arguments );
+      } else {
+        $.error( 'Method ' +  method + ' does not exist on jQuery.html5formvalidation' );
+      }    
+
+    };
       
-      // for different kind of types do different validation...
-      if (type == 'checkbox' || type == 'radio')
-      {        
-        if (!$('[name*="'+element.attr('name')+'"]:checked')) 
-        {
-          error_class_name != '' ? $('[name*="'+element.attr('name')+'"]').addClass(error_class_name) : null;
-          is_valid =false;
-        }
-      }
-      else 
-      {
-        // for other input types verifies if value is empty
-        if(element.val().trim() == '')
-        {
-          is_valid =false;
-          error_class_name != '' ? element.addClass(error_class_name) : null;
-        }
-      }
-    }
-    if($(this).attr('pattern'))
-    {
-      // get input element       
-      var element = $(this);
-      // get the pattern
-      var pattern = element.attr('pattern');     
-      // if pattern don't match     
-      if(pattern && pattern != '' && !element.val().match('^'+pattern+'$'))
-      {
-        is_valid = false;
-        error_class_name != '' ? element.addClass(error_class_name) : null;
-      }
-    }
-    
-    return is_valid;
-  
-}
-
-jQuery.fn.preparehtml5validation = function (error_class_name)
-{  
-  $(this).find('input, select, textarea').each(function () {
-    $(this).bind('change keyup',function () {  
-      $(this).html5validation(error_class_name);
-    });
-
-  });
-}
-
-jQuery.fn.form5 = function (error_class_name, action_id) {
-  
-  $(this).bind('submit', function () {
-    $(this).html5validation(error_class_name);
-  });
-  
-  $(this).preparehtml5validation(error_class_name);
-  
-}
+})( jQuery );
