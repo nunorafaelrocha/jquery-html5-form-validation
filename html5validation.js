@@ -12,6 +12,13 @@
 
   var methods = {
       init : function( options ) { 
+        
+        var defaults = {
+          'error_class' : 'negative',
+        };
+        
+        var options = $.extend({}, defaults, options); 
+        
         var form = $(this);
         form.bind('submit', function () {
           form.html5formvalidation('validation', options );
@@ -32,8 +39,11 @@
         return is_valid;
       },
       elementValidation : function( options ) { 
+        
         var element = $(this);
         var elem_is_valid = true;
+
+        options.error_class ? element.removeClass(options.error_class) : null;
 
         // if has required tag
         if (element.attr('required')) 
@@ -46,6 +56,10 @@
             {
               options.error_class ? $('[name*="'+element.attr('name')+'"]').addClass(options.error_class) : null;
               elem_is_valid =false;
+            }
+            else
+            {
+              options.error_class ? $('[name*="'+element.attr('name')+'"]').removeClass(options.error_class) : null;
             }
           }
           else 
@@ -64,7 +78,7 @@
         if (element.attr('pattern')) 
         {
           // get the pattern
-          var pattern = element.attr('pattern');     
+          var pattern = element.attr('pattern');
           // if pattern don't match     
           if(!element.val().match('^'+pattern+'$'))
           {
