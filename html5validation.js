@@ -1,6 +1,6 @@
 /*
  * jQuery Html5 Form Validation v.1
- * https://github.com/blueimp/jQuery-File-Upload
+ * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
  * http://nunorafaelrocha.com
