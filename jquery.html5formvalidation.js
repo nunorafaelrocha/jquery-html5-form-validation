@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1.0.1
+ * jQuery Html5 Form Validation v.1.0.2
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
@@ -9,14 +9,15 @@
 
 
 (function( $ ){
-
+  
+  // default options
+  var defaults = {
+    'error_class' : 'invalid'
+  };
+  
   var methods = {
       // initialization method
       init : function( options ) { 
-        // default options
-        var defaults = {
-          'error_class' : 'invalid'
-        };
         var options = $.extend({}, defaults, options); 
         // form element
         var form = $(this);
@@ -32,6 +33,7 @@
       
       // validatoin on all form elements
       validation : function( options ) {
+        var options = $.extend({}, defaults, options);         
         // indicaties if form is valid
         var is_valid = true;
         // foreach form element do the validation
@@ -44,6 +46,7 @@
       
       // element validation
       elementValidation : function( options ) { 
+        var options = $.extend({}, defaults, options);         
         var element = $(this);
         // element type
         var type = element.attr('type');
