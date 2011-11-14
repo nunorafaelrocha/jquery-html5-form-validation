@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1.0.3
+ * jQuery Html5 Form Validation v.1.0.4
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
@@ -82,7 +82,7 @@
         }
         
         // if has pattern tag
-        if (element.attr('pattern')) 
+        if (element.attr('pattern') && $.trim(element.val()) != '') 
         {
           // get the pattern
           var pattern = element.attr('pattern');
