@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1.0.2
+ * jQuery Html5 Form Validation v.1.0.3
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
@@ -62,7 +62,7 @@
           if (type == 'checkbox' || type == 'radio')
           {        
             // verifies if one of the elements with this name has been checked
-            if (!$('[name*="'+element.attr('name')+'"]:checked')) 
+            if (!$('[name*="'+element.attr('name')+'"]:checked').length) 
             {
               elem_is_valid =false;
               // add error class for every elements with the same name
