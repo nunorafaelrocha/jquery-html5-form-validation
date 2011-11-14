@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1
+ * jQuery Html5 Form Validation v.1.0.1
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
