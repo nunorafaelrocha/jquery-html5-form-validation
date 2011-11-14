@@ -15,14 +15,14 @@
       init : function( options ) { 
         // default options
         var defaults = {
-          'error_class' : 'invalid',
+          'error_class' : 'invalid'
         };
         var options = $.extend({}, defaults, options); 
         // form element
         var form = $(this);
         // bind form onsubmit action
         form.bind('submit', function () {
-          form.html5formvalidation('validation', options );
+          return form.html5formvalidation('validation', options );
         });
         // bind all form elements
         form.find('input, textarea, select').bind('change keyup', function () {
@@ -74,7 +74,7 @@
           else 
           {
             // for other input types verifies if value is empty
-            element.val().trim() == '' ? elem_is_valid = false : null;
+            $.trim(element.val()) == '' ? elem_is_valid = false : null;
           }
         }
         
@@ -111,10 +111,10 @@
         
         
         // if element is not valid, apply the error class if not null
-        !elem_is_valid ? (options.error_class ? element.addClass(options.error_class) : null) : null;
+        !elem_is_valid && options.error_class ? element.addClass(options.error_class) : null;
         
         return elem_is_valid;
-      },
+      }
       
     };
     
