@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1.0.4
+ * jQuery Html5 Form Validation v.1.0.5
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
@@ -12,7 +12,11 @@
   
   // default options
   var defaults = {
-    'error_class' : 'invalid'
+    'errorClass' : 'invalid',
+    onFail : function () {},
+    onSuccess : function () {},
+    onFailElement : function () {},
+    onSuccessElement: function () {}
   };
   
   var methods = {
@@ -33,6 +37,7 @@
       
       // validatoin on all form elements
       validation : function( options ) {
+
         var options = $.extend({}, defaults, options);         
         // indicaties if form is valid
         var is_valid = true;
@@ -41,6 +46,8 @@
           is_valid = ($(this).html5formvalidation('elementValidation', options) ? is_valid : false);          
         });
         
+        !is_valid ? options.onFail() : options.onSuccess();
+
         return is_valid;
       },
       
@@ -53,7 +60,7 @@
         // indicates if element is valid
         var elem_is_valid = true;
         // remove error class (if not null or empty) from this element before validate
-        options.error_class ? element.removeClass(options.error_class) : null;
+        options.errorClass ? element.removeClass(options.errorClass) : null;
 
         // if has required tag
         if (element.attr('required')) 
@@ -66,12 +73,12 @@
             {
               elem_is_valid =false;
               // add error class for every elements with the same name
-              options.error_class ? $('[name*="'+element.attr('name')+'"]').addClass(options.error_class) : null;
+              options.errorClass ? $('[name*="'+element.attr('name')+'"]').addClass(options.errorClass) : null;
             }
             else
             {
               // removes error class for every elements with the same name
-              options.error_class ? $('[name*="'+element.attr('name')+'"]').removeClass(options.error_class) : null;
+              options.errorClass ? $('[name*="'+element.attr('name')+'"]').removeClass(options.errorClass) : null;
             }
           }
           else 
@@ -113,8 +120,10 @@
         }
         
         
+        !elem_is_valid ? options.onFailElement() : options.onSuccessElement();
+        
         // if element is not valid, apply the error class if not null
-        !elem_is_valid && options.error_class ? element.addClass(options.error_class) : null;
+        !elem_is_valid && options.errorClass ? element.addClass(options.errorClass) : null;
         
         return elem_is_valid;
       }
