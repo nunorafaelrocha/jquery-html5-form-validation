@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1.0.5
+ * jQuery Html5 Form Validation v.1.0.6
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
@@ -18,27 +18,33 @@
     onFailElement : function () {},
     onSuccessElement: function () {}
   };
-  
+    
   var methods = {
       // initialization method
       init : function( options ) { 
         var options = $.extend({}, defaults, options); 
         // form element
         var form = $(this);
+        // save options
+        form.data('options', options)
         // bind form onsubmit action
         form.bind('submit', function () {
-          return form.html5formvalidation('validation', options );
+          return form.html5formvalidation('validation');
         });
-        // bind all form elements
-        form.find('input, textarea, select').bind('change keyup', function () {
-          $(this).html5formvalidation('elementValidation', options);
+        // form elements
+        form.find('input, textarea, select').each(function (argument) {
+          // save options
+          $(this).data('options', options);
+          // bind
+          $(this).bind('change keyup', function () {
+            $(this).html5formvalidation('elementValidation', options);
+          });
         });
       },
       
       // validatoin on all form elements
       validation : function( options ) {
-
-        var options = $.extend({}, defaults, options);         
+        var options = $.extend({}, defaults, $(this).data().options, options);         
         // indicaties if form is valid
         var is_valid = true;
         // foreach form element do the validation
@@ -53,7 +59,7 @@
       
       // element validation
       elementValidation : function( options ) { 
-        var options = $.extend({}, defaults, options);         
+        var options = $.extend({}, defaults, $(this).data().options, options);         
         var element = $(this);
         // element type
         var type = element.attr('type');
