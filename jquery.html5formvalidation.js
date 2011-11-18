@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1.0.6
+ * jQuery Html5 Form Validation v.1.0.7
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
@@ -16,7 +16,8 @@
     onFail : function () {},
     onSuccess : function () {},
     onFailElement : function () {},
-    onSuccessElement: function () {}
+    onSuccessElement: function () {},
+    extraValidation: function () {return true;}    
   };
     
   var methods = {
@@ -51,6 +52,8 @@
         this.find('input, textarea, select').each(function () {
           is_valid = ($(this).html5formvalidation('elementValidation', options) ? is_valid : false);          
         });
+        
+        !options.extraValidation() ? is_valid = false : null;
         
         !is_valid ? options.onFail() : options.onSuccess();
 
