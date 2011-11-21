@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1.0.7
+ * jQuery Html5 Form Validation v.1.0.9
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
@@ -17,7 +17,8 @@
     onSuccess : function () {},
     onFailElement : function () {},
     onSuccessElement: function () {},
-    extraValidation: function () {return true;}    
+    extraValidation: function () {return true;}, 
+    extraElementValidation : function() {}
   };
     
   var methods = {
@@ -40,6 +41,10 @@
           $(this).bind('change keyup', function () {
             $(this).html5formvalidation('elementValidation', options);
           });
+        });
+        
+        $.each(options.extraElementValidation, function (key, value) {
+          form.find(key).data('html5formvalidation_custom_validation', value);
         });
       },
       
@@ -128,6 +133,12 @@
           }
         }
         
+
+        // extra validation
+        if (element.data('html5formvalidation_custom_validation')) 
+        {
+          !element.data('html5formvalidation_custom_validation')(element, elem_is_valid) ? elem_is_valid = false : null;
+        }
         
         !elem_is_valid ? options.onFailElement() : options.onSuccessElement();
         
