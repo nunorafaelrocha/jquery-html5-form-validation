@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1.0.9
+ * jQuery Html5 Form Validation v.1.1.0
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
@@ -35,11 +35,20 @@
         });
         // form elements
         form.find('input, textarea, select').each(function (argument) {
+          // element
+          var element = $(this);
           // save options
-          $(this).data('options', options);
+          element.data('options', options);
           // bind
-          $(this).bind('change keyup', function () {
-            $(this).html5formvalidation('elementValidation', options);
+          element.bind('keydown', function () {
+            element.data('html5formvalidation_typing', true);
+          });
+          element.bind('change keyup', function () {
+            element.data('html5formvalidation_typing', false);
+            if (element.data().html5formvalidation_timeout) {
+              clearTimeout(element.data().html5formvalidation_timeout);
+            };            
+            element.data('html5formvalidation_timeout', setTimeout(function() {element.html5formvalidation('elementValidation', options)}, 200));
           });
         });
         
@@ -66,9 +75,17 @@
       },
       
       // element validation
-      elementValidation : function( options ) { 
+      elementValidation : function( options ) {
+        
         var options = $.extend({}, defaults, $(this).data().options, options);         
         var element = $(this);
+        // is typing 
+        if(element.data().html5formvalidation_typing)
+        {
+          console.log('ola');
+          return false;
+        } 
+
         // element type
         var type = element.attr('type');
         // indicates if element is valid
@@ -133,7 +150,6 @@
           }
         }
         
-
         // extra validation
         if (element.data('html5formvalidation_custom_validation')) 
         {
