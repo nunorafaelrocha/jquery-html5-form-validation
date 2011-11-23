@@ -82,7 +82,6 @@
         // is typing 
         if(element.data().html5formvalidation_typing)
         {
-          console.log('ola');
           return false;
         } 
 
