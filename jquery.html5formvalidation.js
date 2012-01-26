@@ -1,5 +1,5 @@
 /*
- * jQuery Html5 Form Validation v.1.1.0
+ * jQuery Html5 Form Validation v.1.1.2
  * https://github.com/nunorafaelrocha/jquery-html5-form-validation
  *
  * Copyright 2011, Nuno Rafael Rocha
@@ -82,7 +82,7 @@
         // is typing 
         if(element.data().html5formvalidation_typing)
         {
-          return false;
+          return true;
         } 
 
         // element type
@@ -96,7 +96,7 @@
         if (element.attr('required')) 
         {
           // for different kind of types do different validation...
-          if (type == 'checkbox' || type == 'radio')
+          if (type === 'checkbox' || type === 'radio')
           {        
             // verifies if one of the elements with this name has been checked
             if (!$('[name*="'+element.attr('name')+'"]:checked').length) 
@@ -114,12 +114,12 @@
           else 
           {
             // for other input types verifies if value is empty
-            $.trim(element.val()) == '' ? elem_is_valid = false : null;
+            $.trim(element.val()) === '' ? elem_is_valid = false : null;
           }
         }
-        
+
         // if has pattern tag
-        if (element.attr('pattern') && $.trim(element.val()) != '') 
+        if (element.attr('pattern') && $.trim(element.val()) !== '') 
         {
           // get the pattern
           var pattern = element.attr('pattern');
@@ -128,7 +128,7 @@
         }
         
         // if has a special type...
-        if (type == 'email') 
+        if (type === 'email') 
         {
           // verify if has email format
           // regular expression for email
@@ -140,7 +140,7 @@
             var emails = element.val().split(',');
             for(var i=0; i<emails.length; i++)
             {
-              (emails[i] == '' || !emailReg.test(emails[i])) ? elem_is_valid = false : null;
+              (emails[i] === '' || !emailReg.test(emails[i])) ? elem_is_valid = false : null;
             }
           } 
           else
@@ -155,14 +155,20 @@
           !element.data('html5formvalidation_custom_validation')(element, elem_is_valid) ? elem_is_valid = false : null;
         }
         
-        !elem_is_valid ? options.onFailElement() : options.onSuccessElement();
-        
-        // if element is not valid, apply the error class if not null
-        !elem_is_valid && options.errorClass ? element.addClass(options.errorClass) : null;
-        
+        element.html5formvalidation('setState', elem_is_valid, options);
+
         return elem_is_valid;
-      }
+      },
       
+      setState: function ( state, options ) {
+        var element = $(this);
+        var options = $.extend({}, defaults, $(this).data().options, options);
+        
+        !state ? options.onFailElement() : options.onSuccessElement();
+
+        // if element is not valid, apply the error class if not null
+        !state && options.errorClass ? element.addClass(options.errorClass) : null;        
+      }
     };
     
   $.fn.html5formvalidation = function( method ) {
